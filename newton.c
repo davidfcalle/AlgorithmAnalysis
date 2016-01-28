@@ -18,10 +18,9 @@ double siguientePaso(double x,double num){
   return x - (f(x, num) / fPrima(x));
 }
 double  newtonRaphson(double x, double r){
-  printf("%lf\n", x );
   double xi = 1, xs, tmp;
   xs = siguientePaso(xi, x);
-  while(  error(xs, xi) > r ){  
+  while(  error(xs, xi) > r ){
     xi = xs;
     xs = siguientePaso(xi,x); // x es el num del usuario
   }
@@ -34,7 +33,7 @@ int main(int argc, char const *argv[]) {
   scanf("%i %lf", &n, &r);
   while(n--){
     scanf("\n%lf", &num); // el \n  es para escapar lo que viene en el buffer
-    printf("Resultado : %lf\n", newtonRaphson(num,r) );
+    printf("%lf\n", newtonRaphson(num,r) );
   }
   return 0;
 }
