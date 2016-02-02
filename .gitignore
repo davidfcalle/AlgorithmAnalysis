@@ -1,1 +1,4 @@
 *.pyc
+*.dvi
+*.log
+*.aux

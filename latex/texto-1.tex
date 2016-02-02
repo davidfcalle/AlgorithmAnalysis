@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage{mathtools}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{lmodern}
+\usepackage{mathtools, nccmath}
+\usepackage{xparse}
+\begin{document}
+
+\section{Busqueda Lineal}
+
+% Algoritmo 1
+
+
+\begin{algorithm}[htp]
+\DontPrintSemicolon
+\SetAlgoLined
+\SetKwInOut{Input}{Entrada}\SetKwInOut{Output}{Salida}
+\Input{Una secuencia S de numeros, Entero v}
+\Output{$i\mid$  i $\in$  $\mathbb{N}$ $\land$ ( i $>$ 0   $\lor$  i $<$ $|$ S $|$  $\lor$ i = $\aleph$ ) }
+\BlankLine
+
+\For{ $i\leftarrow 1$ to  $|$ S $|$  }{
+	\If{S[i] = v}{
+		return i\;
+	}
+	return $\aleph$\;
+}
+
+\caption{Busqueda Lineal}
+\end{algorithm}
+\bigskip % add 12pt space in-between
+\subsection{Invariantes}
+
+
+% Algorithm 2: Conteo
+
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\SetAlgoLined
+\KwResult{Write here the result}
+\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+\Input{Write here the input}
+\Output{Write here the output}
+\BlankLine
+
+$x\leftarrow 0$	\;
+$y\leftarrow 0$	\;
+\BlankLine
+\ForEach{ForEach condition}{
+
+	\BlankLine
+
+	\tcc{comments on code}
+	\ForEach{ForEach condition}{
+		\If{If condition}{
+			instruction(s) like below: \\
+			increase $x$ by $1$\;
+			decrease $y$ by $2$\;
+		}
+
+		\BlankLine
+
+		\uIf{If condition}{
+			instruction
+		}
+		\uElseIf{ElseIf condition}{
+			instruction
+		}
+		\uElse{
+			instruction
+		}
+	}
+}
+\caption{Conteo de repetidos}
+\end{algorithm}
+
+\end{document}
