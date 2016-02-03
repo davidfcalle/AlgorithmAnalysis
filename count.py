@@ -14,5 +14,14 @@ def count_alternative( list ):
         s.add(item)
     return len( list ) - len( s )
 
+def count_repeated_element( S , v):
+    count = 0
+    for s in S:
+        if s == v:
+            count = count + 1
+    return count
+
+
 if __name__ == '__main__':
     print count_repeated([1,2,2,3,2,1,2,3,4,6])
+    print count_repeated_element([1,2,2,3,2,1,2,3,4,6,2],2)
