@@ -1,6 +1,6 @@
 from quick_sort import quick_sort
 from insertion_sort import insertion_sort
-
+from merge_sort import merge_sort
 #----------------------------------------------------------------------------
 #Genera un arreglo de tamanio t con numeros enteros aleatorios.
 def generate_vector( t ):
@@ -24,8 +24,9 @@ def take_data (  functionOrder , filename ):
 
 
 def main():
-    S = [1,2,3,5,2,2,3,4,5, -1 ,-2, -5,10, -2]
-    quick_sort( S , 0 , len( S ) - 1 )
+    S = [7,1, -12, 2,2,32,321,123, -1]
+    print S
+    merge_sort( S , 0 , len( S ) - 1 )
     print S
 
 if __name__ == '__main__':
