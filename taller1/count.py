@@ -23,5 +23,6 @@ def count_repeated_element( S , v):
 
 
 if __name__ == '__main__':
-    print count_repeated([1,2,2,3,2,1,2,3,4,6])
-    print count_repeated_element([1,2,2,3,2,1,2,3,4,6,2],2)
+    a = [1,2,2,3,2,1,2,3,4,6]
+    quick_sort( a , 0, len(a) )
+    print a
