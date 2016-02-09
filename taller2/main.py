@@ -1,8 +1,9 @@
-from quick_sort import quick_sort
+from quick_sort import quick_sort, quick_sort_helper
 from insertion_sort import insertion_sort
-from merge_sort import merge_sort
+from merge_sort import merge_sort, merge_sort_helper
 from timer import count_time
-
+import random
+import sys
 #----------------------------------------------------------------------------
 #Genera un arreglo de tamanio t con numeros enteros aleatorios.
 def generate_vector( t ):
@@ -11,32 +12,37 @@ def generate_vector( t ):
     vector.append(  random.randint( 0, 1000 ) )
   return vector
 
+#----------------------------------------------------------------------------
+#Genera un arreglo de tamanio t con numeros enteros ordenados
 def generate_ordered_vector( t ):
-    vector = []
-    for i in range( t ):
-        vector.append( i )
-    return vector
+  vector = []
+  for i in range ( t ):
+    vector.append( i )
+  return vector
 
+def generate_inverse_vector( t ):
+    vector = []
+    for i in range ( t ):
+      vector.append( len(t) - i )
+    return vector
 
 #----------------------------------------------------------------------------
 # Ejecuta la funcion de ordenamiento functionOrder recibida como parametro para vectores de tamanio i=1,2,....,1x10^4
 # Calcula el tiempo que demora ordenando cada arreglo y escribe el resulatdo en un archivo de
 # texto con el nombre de filename
-def take_data (  functionOrder , filename, strategy ):
+def take_data (  function , filename ):
   file = open ( filename, 'w')
-  data = []
-  for i in  range ( 1, 10**4 + 1 ):
-    S = strategy ( i )
-    time_taken =
-    data.append({"n": i , })
+  for i in  range ( 1, 10**5 ):
+    S = generate_vector ( i )
+    time_taken = count_time( function , S )
+    function( S )
     file.write( '%d\t %f\n' % ( i, time_taken ) )
   file.close( )
 
 
 def main():
-    S = [7,1, -12, 2,2,32,321,123, -1, 50, 2,3,3,4,34,23,4,32,432,4,32,43,24,32,4,32,432,4,32,43,24,32,4,32,5,3,5433-4-5,435,4,5,4]
-    print count_time( merge_sort , S , 0 , len(S) - 1)
-    print S
+    sys.setrecursionlimit(100000)
+    take_data(quick_sort_helper, "quick_sort.txt")
 
 if __name__ == '__main__':
     main()

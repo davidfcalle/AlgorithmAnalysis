@@ -21,3 +21,6 @@ def merge( S , q , p , r ):
         else:
             S[ k ] = l[ j ]
             j = j + 1
+
+def merge_sort_helper( S ):
+    merge_sort( S , 0 , len(S) - 1 )

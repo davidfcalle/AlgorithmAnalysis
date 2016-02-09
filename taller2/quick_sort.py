@@ -1,9 +1,7 @@
 def partition (S,L,R):
     pivot = S[ R ]
     i = L
-#    print " L-R %i-%i" % (L, R)
     for j in range( L , R  ):
-#        print "j %i" % j
         if S[ j ] <= pivot:
             tmp = S[ i ]
             S[ i ] = S[ j ]
@@ -17,9 +15,10 @@ def partition (S,L,R):
 
 
 def quick_sort(S,L,R):
-    print S
     if L < R:
         index = partition( S , L , R)
-        print "Index %i"  % index
         quick_sort( S , L , index - 1)
         quick_sort( S, index + 1 , R )
+
+def quick_sort_helper(S):
+    quick_sort( S , 0 , len(S) - 1 )
