@@ -1,6 +1,3 @@
-import time
-import random
-
 def insertion_sort(S):
     for j in range ( 1 , len(S) ):
         k = S[j]
