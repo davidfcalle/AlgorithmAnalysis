@@ -9,7 +9,7 @@ import sys
 def generate_vector( t ):
   vector = []
   for i in range ( t ):
-    vector.append(  random.randint( 0, 1000 ) )
+    vector.append(  random.randint( 0, 10 ) )
   return vector
 
 #----------------------------------------------------------------------------
@@ -23,26 +23,34 @@ def generate_ordered_vector( t ):
 def generate_inverse_vector( t ):
     vector = []
     for i in range ( t ):
-      vector.append( len(t) - i )
+      vector.append( t - i )
     return vector
 
 #----------------------------------------------------------------------------
 # Ejecuta la funcion de ordenamiento functionOrder recibida como parametro para vectores de tamanio i=1,2,....,1x10^4
 # Calcula el tiempo que demora ordenando cada arreglo y escribe el resulatdo en un archivo de
 # texto con el nombre de filename
-def take_data (  function , filename ):
-  file = open ( filename, 'w')
-  for i in  range ( 1, 10**5 ):
-    S = generate_vector ( i )
+def take_data (  function , filename , strategy ):
+  file = open ( filename , 'w' )
+  for i in  range ( 1, 10**3 ):
+    S = strategy( i )
     time_taken = count_time( function , S )
     function( S )
-    file.write( '%d\t %f\n' % ( i, time_taken ) )
+    file.write( '%d,%f\n' % ( i, time_taken ) )
   file.close( )
 
 
 def main():
     sys.setrecursionlimit(100000)
-    take_data(quick_sort_helper, "quick_sort.txt")
+    take_data( quick_sort_helper , "quick_sort-mixed.csv" , generate_vector )
+    take_data( quick_sort_helper , "quick_sort-ordered.csv" , generate_ordered_vector )
+    take_data( quick_sort_helper , "quick_sort-unordered.csv" , generate_inverse_vector )
+    take_data( merge_sort_helper , "merge_sort-mixed.csv" , generate_vector )
+    take_data( merge_sort_helper , "merge_sort-ordered.csv" , generate_ordered_vector )
+    take_data( merge_sort_helper , "merge_sort-unordered.csv" , generate_inverse_vector )
+    take_data( insertion_sort , "insertion_sort-mixed.csv" , generate_vector )
+    take_data( insertion_sort , "insertion_sort-ordered.csv" , generate_ordered_vector )
+    take_data( insertion_sort , "insertion_sort-unordered.csv" , generate_inverse_vector )
 
 if __name__ == '__main__':
     main()

@@ -4,4 +4,8 @@
 *.aux
 *.pdf
 *.txt
+<<<<<<< HEAD
 *.exe
+=======
+*.csv
+>>>>>>> 4b7dbfb791fd32cffd7e633a7dc6805a1592e985
