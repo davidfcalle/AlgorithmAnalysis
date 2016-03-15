@@ -1,0 +1,14 @@
+{
+  "nombre" : "Análisis de Algoritmos",
+  "creditos" : "2" ,
+  "estudiantes" : [
+    {
+      "nombre" : "Alejandra",
+      "apellido" : "Guerrero"
+    },
+    {
+      "nombre" : "David",
+      "apellido" : "Suárez"
+    }
+  ]
+}
