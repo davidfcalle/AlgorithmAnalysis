@@ -1,5 +1,5 @@
 """
-    Ejercicio de parentizacion
+    Ejercicio de parentizacion , es es la matriz de verdaderos, f es el amatriz de falsos
 """
 def total( Symbols , Operators,  i , j , T , F ):
     return true( Symbols , Operators , i , j , T , F ) + false( Symbols , Operators , i , j , T , F )
@@ -63,8 +63,23 @@ def parenthesization_true( Symbols, Operators ):
     F = [ None ] * len( Symbols )
     for k in range( len( T ) ) :
         T[ k ] = [ None ] * len( Symbols )
-        F[ k ] = [ None ] * len( Symbols )  
-    return true( Symbols , Operators , 0 , len( Symbols ) - 1 , T , F )
+        F[ k ] = [ None ] * len( Symbols )
+    # se llena la diagonal de los valores
+    for d in range( len( T ) ):
+        if Symbols[ d ] == "T":
+            T[ d ][ d ] = 1
+            F[ d ][ d ] = 0
+        else:
+            T[ d ][ d ] = 0
+            F[ d ][ d ] = 1
+    result =  true( Symbols , Operators , 0 , len( Symbols ) - 1 , T , F )
+    print_matrix( T )
+    return result
+
+def print_matrix( M ):
+    for row in M:
+        print row
+            
 
 if __name__ == "__main__":
     Symbols = "TTFT"
