@@ -32,7 +32,7 @@ def generate_inverse_vector( t ):
 # texto con el nombre de filename
 def take_data (  function , filename , strategy ):
   file = open ( filename , 'w' )
-  for i in  range ( 1, 10**3 ):
+  for i in  range ( 1, 2000 ):
     S = strategy( i )
     time_taken = count_time( function , S )
     function( S )
@@ -42,15 +42,15 @@ def take_data (  function , filename , strategy ):
 
 def main():
     sys.setrecursionlimit(100000)
+    #take_data( quick_sort_helper , "quick_sort-ordered.csv" , generate_ordered_vector )
+    #take_data( quick_sort_helper , "quick_sort-unordered.csv" , generate_inverse_vector )
     take_data( quick_sort_helper , "quick_sort-mixed.csv" , generate_vector )
-    take_data( quick_sort_helper , "quick_sort-ordered.csv" , generate_ordered_vector )
-    take_data( quick_sort_helper , "quick_sort-unordered.csv" , generate_inverse_vector )
-    take_data( merge_sort_helper , "merge_sort-mixed.csv" , generate_vector )
-    take_data( merge_sort_helper , "merge_sort-ordered.csv" , generate_ordered_vector )
-    take_data( merge_sort_helper , "merge_sort-unordered.csv" , generate_inverse_vector )
-    take_data( insertion_sort , "insertion_sort-mixed.csv" , generate_vector )
-    take_data( insertion_sort , "insertion_sort-ordered.csv" , generate_ordered_vector )
-    take_data( insertion_sort , "insertion_sort-unordered.csv" , generate_inverse_vector )
+    #take_data( merge_sort_helper , "merge_sort-mixed.csv" , generate_vector )
+    #take_data( merge_sort_helper , "merge_sort-ordered.csv" , generate_ordered_vector )
+    #take_data( merge_sort_helper , "merge_sort-unordered.csv" , generate_inverse_vector )
+    #take_data( insertion_sort , "insertion_sort-mixed.csv" , generate_vector )
+    #take_data( insertion_sort , "insertion_sort-ordered.csv" , generate_ordered_vector )
+    #take_data( insertion_sort , "insertion_sort-unordered.csv" , generate_inverse_vector )
 
 if __name__ == '__main__':
     main()
