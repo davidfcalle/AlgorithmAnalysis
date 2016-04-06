@@ -19,7 +19,7 @@ def false( Symbols , Operators , i , j , T , F ):
           if Operators[ k ] == "and" :
              a = total( Symbols , Operators , i , k , T , F ) * total( Symbols , Operators , k + 1 , j , T , F )
              b = true( Symbols , Operators , i , k , T , F   ) * true( Symbols , Operators , k + 1  , j  , T , F )
-             count = count + ( a - b ) 
+             count = count + ( a - b )
           elif Operators[ k ] == "or" :
               a = false( Symbols , Operators , i , k , T , F   )
               b = false( Symbols , Operators , k + 1  , j  , T , F )
@@ -27,12 +27,12 @@ def false( Symbols , Operators , i , j , T , F ):
           else:
              # es un XOR
              a = true( Symbols , Operators , i , k , T , F ) * true( Symbols , Operators , k + 1 , j , T , F )
-             b = false( Symbols , Operators , i , k , T , F ) * false( Symbols , Operators , k + 1 , j , T , F ) 
+             b = false( Symbols , Operators , i , k , T , F ) * false( Symbols , Operators , k + 1 , j , T , F )
              count = count + ( a + b )
       F[ i ][ j ] = count
       return count
 
-def true(  Symbols , Operators , i , j , T , F ): 
+def true(  Symbols , Operators , i , j , T , F ):
     if i == j and Symbols[ i ] == "T":
         return 1
     elif i == j and Symbols[ i ] == "F":
@@ -50,10 +50,10 @@ def true(  Symbols , Operators , i , j , T , F ):
           elif Operators[ k ] == "or" :
              a = total( Symbols , Operators , i , k , T , F ) * total( Symbols , Operators , k + 1 , j , T , F )
              b = false( Symbols , Operators , i , k , T , F ) * false( Symbols , Operators , k + 1  , j  , T , F )
-             count = count + ( a - b )  
+             count = count + ( a - b )
           else:
              a = true( Symbols , Operators , i , k , T , F ) * false( Symbols , Operators , k + 1 , j , T , F )
-             b = false( Symbols , Operators , i , k , T , F ) * true( Symbols , Operators , k + 1 , j , T , F ) 
+             b = false( Symbols , Operators , i , k , T , F ) * true( Symbols , Operators , k + 1 , j , T , F )
              count = count + ( a + b )
       T[ i ][ j ] = count
       return count
@@ -79,10 +79,9 @@ def parenthesization_true( Symbols, Operators ):
 def print_matrix( M ):
     for row in M:
         print row
-            
+
 
 if __name__ == "__main__":
     Symbols = "TTFT"
     Operators= [ "or" , "and" , "xor" ]
     print "Resultado %s es %i" % ( Symbols ,  parenthesization_true( Symbols , Operators ) )
-
