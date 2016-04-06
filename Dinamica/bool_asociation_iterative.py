@@ -35,9 +35,12 @@ def parenthesization_iterative( symbols,  operators,  n, F, T ):
 
             i = i + 1
 
-def print_matrix( M ):
-    for row in M:
-        print row
+def print_matrix( matrix ):
+    s = [[str(e) for e in row] for row in matrix]
+    lens = [max(map(len, col)) for col in zip(*s)]
+    fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+    table = [fmt.format(*row) for row in s]
+    print '\n'.join(table)
 
 if __name__ == "__main__":
     Symbols = "TTFT"
