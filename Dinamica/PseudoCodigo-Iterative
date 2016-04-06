@@ -1,0 +1,48 @@
+# Basado en: http://www.geeksforgeeks.org/dynamic-programming-set-37-boolean-parenthesization-problem/
+
+function parenthesization_iterative( symbols,  operators,  n, F, T ):
+
+    #se llena la diagonal con valores, es decir, evaluarse asi mismo.
+    for i in range( n ) do
+        F[i][i] <- 0
+        T[i][i] <- 0
+        if Symbols[i] = "T" then
+            T[i][i] <- 1
+        else
+            F[i][i] <- 1
+
+    for gap <-1 to n do
+        i <- 0;
+        for j <- gap to n do
+            T[i][j] <- F[i][j] <- 0
+            for g <- to gap do
+                # Posicion del operando final en la prentizacion.
+                k <- i + g
+
+                # Calculamos el total T( i, j )
+                tik <- T[i][k] + F[i][k]
+                tkj <- T[k+1][j] + F[k+1][j]
+
+                if operators[ k ] = "and" then
+                    T[i][j] <- T[i][j] + T[i][k] * T[k+1][j]
+                    F[i][j] <- F[i][j] + ( ( tik * tkj ) - T[i][k] * T[k+1][j] )
+                elif operators[ k ] = "or" then
+                    F[i][j] <- F[i][j] + F[i][k] * F[k+1][j]
+                    T[i][j] <- T[i][j] + ( ( tik * tkj ) - F[i][k] * F[k+1][j] )
+                else
+                    T[i][j] <- T[i][j] + F[i][k] * T[k+1][j] + T[i][k] * F[k+1][j]
+                    F[i][j] <- F[i][j] + T[i][k] * T[k+1][j] + F[i][k] * F[k+1][j]
+
+            i <- i + 1
+end function
+
+
+function main ( )
+    Symbols <- "TTFT"
+    Operators<- [ "or" , "and" , "xor" ]
+    n <-|Symbols|
+    Let T an array of nxn
+    Let F an array of nxn
+
+    parenthesization_iterative( Symbols,  Operators,  n, F, T )
+end function
