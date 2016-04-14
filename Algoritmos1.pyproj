@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94a2469c-47f7-44f7-9177-a9405211ce98}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>seguridad\rabin.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <InterpreterVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dinamica\01-Knapsack.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dinamica\bool_asociation.py" />
+    <Compile Include="Dinamica\bool_asociation_iterative.py" />
+    <Compile Include="Dinamica\bool_asociation_memoized.py" />
+    <Compile Include="Dinamica\cut_rod.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dinamica\fibonnacci.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dinamica\max_cont_val.py" />
+    <Compile Include="Dinamica\pal.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="quiz3\lcs.py" />
+    <Compile Include="seguridad\rabin.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="taller1\count.py" />
+    <Compile Include="taller1\linear_search.py" />
+    <Compile Include="taller2\insertion_sort.py" />
+    <Compile Include="taller2\main.py" />
+    <Compile Include="taller2\mediana.py" />
+    <Compile Include="taller2\merge_sort.py" />
+    <Compile Include="taller2\quick_sort.py" />
+    <Compile Include="taller2\timer.py" />
+    <Compile Include="Taller3\cut_rod.py" />
+    <Compile Include="Taller3\square_cut.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dinamica" />
+    <Folder Include="seguridad\" />
+    <Folder Include="quiz3" />
+    <Folder Include="taller1" />
+    <Folder Include="taller2" />
+    <Folder Include="Taller3" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
