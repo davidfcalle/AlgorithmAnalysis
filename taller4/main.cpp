@@ -11,6 +11,11 @@
 #include "Number.h"
 #include "optimal.h"
 #include <set>
+#include <stdio.h>      /* printf, scanf, puts, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
+
+//////////////////////////////////////////////////////////////// BORRAR EL RANDOM
 
 #define  PAIR std::pair< unsigned long , unsigned long >
 
@@ -20,16 +25,22 @@ bool operator < (const Node<T>& lhs, const Node<T>& rhs) {
 }
 
 int main(){
+    srand (time(NULL));
+
 
     std::map< unsigned long , unsigned long > histogram;
     std::ifstream in( "archivito.txt", std::ios_base::binary );
     unsigned long x;
-    std::priority_queue< Node< Number  > > queue; // el primer valor del pair es la frecuencia y el segundo el vlaor
+    std::priority_queue< Node< Number  > > queue;
     std::set< unsigned long  > set;
     long long quemado = 0;
     while( in ){
       in.read( reinterpret_cast< char* >(&x), sizeof( unsigned long ) );
-      x = quemado % 530; // quitar esto antes de enviar, es solo para tenerlo medio quemado
+      //x = quemado % 5334322302; // quitar esto antes de enviar, es solo para tenerlo medio quemado    ACA SE GENERAN LOS CASOS
+      int range = 123 - 0 + 1;
+      int num = rand() % range + 1;
+      x = num;
+      // qutar desde el comentario hasta este
       histogram[ x ]++;
       quemado++;
     }
@@ -68,10 +79,12 @@ int main(){
     for ( unsigned long i = 0; i < 500; i++) {
       Number n;
       n.value = i;
-      huffman->find( n );
-      res[ i ][ i ];
+      huffman->find( n ); // aca busca huffman
+      res[ i ][ i ]; // aca busca optimal
+      set.find( i ); // aca busca set
 
     }
+    std::cout<<"fin!"<<std::endl;
 
 
 

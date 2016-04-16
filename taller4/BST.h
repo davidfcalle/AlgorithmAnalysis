@@ -16,6 +16,7 @@ class BST {
     void buildHuffman( std::priority_queue< Node< T > > queue );
     void preOrder();
     bool find( T value );
+    bool findOrdered( T value );
 };
 
 #include "BST.hxx"
