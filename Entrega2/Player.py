@@ -33,6 +33,7 @@ class Player(object):
         for k in range( self.size + 5 ):
             move = self.random_move(  )
             moves.append( move )
+            raw_input("Press Enter to continue...")
             self.move( move , False )   
         return moves
             
