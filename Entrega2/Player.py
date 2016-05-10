@@ -22,10 +22,9 @@ class Player(object):
             for j in range( self.size ):
                 self.Taquin[ i ][ j ] = count
                 count = count + 1
-        print "llego"
-        #self.play() #quitar en produccion
-        print "llego"
         self.Taquin[ self.size - 1 ][ self.size - 1] = None
+        self.play() #quitar en produccion
+        
 
 
     def shuffle( self ):
@@ -34,6 +33,7 @@ class Player(object):
             move = self.random_move(  )
             moves.append( move )
             self.move( move )
+            raw_input("Press Enter to continue...")
         
         return moves
             
@@ -59,7 +59,7 @@ class Player(object):
     def play( self ):
         generateBoard( self.url , self.Taquin , self.size - 1 , self.size - 1 )
         create_player( self.url , self.pid , self.name )
-        challenge( self.url , self.Taquin , 1 , 1 , self.oid )
+        challenge( self.url , self.Taquin , self.size , self.size , self.oid )
 
     def swap( self , initial_i , initial_j , end_i , end_j ):
         copy = self.Taquin[ initial_i ][ initial_j ]
@@ -69,22 +69,22 @@ class Player(object):
     def move( self , direction ):
         if direction == 0:
             print "        Movimiento derecha %i %i" % ( self.i , self.j )
-            #move_right( self.url , self.pid )
+            move_right( self.url , self.pid )
             self.swap( self.i , self.j , self.i , self.j + 1 )
             self.j = self.j + 1
         elif direction == 1:
              print "        Movimiento izquierda %i %i" % ( self.i , self.j )
-             #move_left( self.url , self.pid )
+             move_left( self.url , self.pid )
              self.swap( self.i , self.j , self.i , self.j - 1 )
              self.j = self.j - 1
         elif direction == 2:
             print "         Movimiento arriba %i %i" % ( self.i , self.j )
-            #move_up( self.url , self.pid )
+            move_up( self.url , self.pid )
             self.swap( self.i , self.j , self.i - 1 , self.j )
             self.i = self.i - 1
         elif direction == 3:
             print "         Movimiento abajo %i %i" % ( self.i , self.j )
-            #move_down( self.url , self.pid )
+            move_down( self.url , self.pid )
             self.swap( self.i , self.j , self.i + 1 , self.j )
             self.i = self.i + 1
         else:
@@ -103,7 +103,6 @@ class Player(object):
         array.pop( 0 )
         for k in range( len( array ) ):
             if array[ k ] != current[ k ]:
-                print "desordenado"
                 return False
         return True
 
@@ -121,7 +120,6 @@ class Player(object):
         while not self.is_ordered():
             queue = Q.PriorityQueue()
             moves = self.get_valid_moves()
-            player_copies = []
             print "Hay %i movimientos" % ( len( moves ) )
             for movement in moves:
                 player_copy = deepcopy( self )
@@ -131,13 +129,12 @@ class Player(object):
             self.move( best.movement )
             print "El mejor movimiento es: %i %i " % ( best.i , best.j )
             raw_input("Press Enter to continue...")
-        print "fin juego"
         #obtener todos los posibles movimientos el movimiento actual
-        print " Fin movimientos "
 
 
 
 class Movement:
+
     def __init__( self, Taquin , i , j , movement ):
         self.Taquin = deepcopy( Taquin )
         self.correctly_placed = self.count_correctly_placed()
@@ -175,7 +172,7 @@ class Movement:
                 count = count + 1
         return count
 
-    def __cmp__(self, other):
+    def __cmp__( self , other ):
         first = cmp( self.correctly_placed , other.correctly_placed )
         if first != 0:
             return first
