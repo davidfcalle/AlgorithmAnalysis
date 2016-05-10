@@ -24,7 +24,7 @@ def generateBoard( domain , matrix , row , column ):
         "movements" : 0,
         "blank" : { "row" : row , "column" : column }
     }
-    response = requests.post( domain + "/api/board/new/",  data=json.dumps(body), headers={"content-type": "application/json"})
+    response = requests.post( domain + "/api/board/new/",  data = json.dumps( body ), headers={ "content-type" : "application/json" } )
 
 """
 esta funcion recibe la matriz y la posicion x , y donde esta la posicion en blanco
@@ -35,14 +35,14 @@ def challenge( domain , matrix , row , column, opponentId ):
         "movements" : 0,
         "blank" : { "row" : row , "column" : column }
     }
-    print domain + "/api/player/%i/challenge/" % ( opponentId )
+    #print domain + "/api/player/%i/challenge/" % ( opponentId )
     response = requests.post( domain + "/api/player/%i/challenge" % ( opponentId ) ,  data=json.dumps(body), headers={"content-type": "application/json"})
 
 """
     funcion que retorna la matriz del reto que hizo un jugador
 """
 def get_challenge( domain , pId ):
-    r = requests.get( domain + "/api/board/%i/" % ( pId ))
+    r = requests.get( domain + "/api/board/%i/" % ( pId ) )
 
 """
     funcion que retorna la matriz del reto que hizo un jugador

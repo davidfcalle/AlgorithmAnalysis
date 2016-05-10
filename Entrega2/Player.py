@@ -7,25 +7,41 @@ class Player(object):
     Taquin = [[]]
 
     def __init__( self , url="http://localhost:8080" , size = 2 , pid = 1 , name="DCD" , oid = 1):
-        print "entra const"
         self.url = url
         self.size = int( size )
         self.Taquin = \
                   [ [ 0 for i in range( self.size ) ] \
                     for j in range( self.size ) ]
         self.pid = pid
-        self.i = self.size - 1
-        self.j = self.size - 1
         self.name = name
         self.oid = oid #id del oponente
+
+    def get_challenge( self ):
+        challenge = get_board( self.url , self.pid )
+        for i in range( len( challenge["currentState"] ) ):
+             for j in range( len( challenge["currentState"] ) ):
+                            try:
+                                self.Taquin[ i ][ j ] = int( challenge["currentState"][ i ][ j ] )
+                            except:
+                                self.Taquin[ i ][ j ]  = None
+        self.i = int( challenge["blank"]["row"] )
+        self.j = int( challenge["blank"]["column"] )
+        self.print_taquin()
+
+    def compete( self ):
+        raw_input( " Oprime enter una vez te hallan retado" ) 
+        self.get_challenge( )
+        self.simulate_player( )
+        
+    def initialize_ordered_matrix( self ):
         count = 1
         for i in range( self.size ):
             for j in range( self.size ):
                 self.Taquin[ i ][ j ] = count
                 count = count + 1
-        #self.play() #quitar en produccion
         self.Taquin[ self.size - 1 ][ self.size - 1] = None
-        
+        self.i = self.size - 1
+        self.j = self.size - 1
 
 
     def shuffle( self ):
@@ -33,7 +49,7 @@ class Player(object):
         for k in range( self.size + 5 ):
             move = self.random_move(  )
             moves.append( move )
-            raw_input("Press Enter to continue...")
+            #raw_input("Press Enter to continue...")
             self.move( move , False )   
         return moves
             
@@ -51,25 +67,30 @@ class Player(object):
 
     def random_move( self ):
         moves = self.get_valid_moves()
-        print moves
         return moves[ random.randint( 0 , len( moves ) - 1 ) ]
 
-    def play( self ):
-        raw_input("Press Enter to continue...")
-        generateBoard( self.url , self.Taquin , self.size - 1 , self.size - 1 )
-        raw_input("Press Enter to continue...")
+    def register( self ):
         create_player( self.url , self.pid , self.name )
-        raw_input("Press Enter to continue...")
-        challenge( self.url , self.Taquin , self.size - 1 , self.size - 1 , self.oid )
+
+    def challenge( self ):
+        """ por ahora el challenge es retar con lo que tambien me pusieron """
+        challenge( self.url , self.Taquin , self.i , self.j , self.oid )
+
+    def create_player( self ):
+        #generateBoard( self.url , self.Taquin , self.i , self.j )
+        self.register( )
 
     def swap( self , initial_i , initial_j , end_i , end_j ):
         copy = self.Taquin[ initial_i ][ initial_j ]
         self.Taquin[ initial_i ][ initial_j ] = self.Taquin[ end_i ][ end_j ]
         self.Taquin[ end_i ][ end_j ] = copy
 
+    """
+        funcion que mueve al jugador en la direccion direction, el segundo paramtero isCopy es para que las copias de jugadores no alteren el estado del servidor
+        si isCopy es True, no envia nada al servidor
+    """
     def move( self , direction , isCopy ):
         if direction == 0:
-            
             if not isCopy:
                 print "        Movimiento derecha %i %i" % ( self.i , self.j )
                 move_right( self.url , self.pid )
@@ -94,7 +115,7 @@ class Player(object):
             self.swap( self.i , self.j , self.i + 1 , self.j )
             self.i = self.i + 1
         else:
-            print "Invalid Move!"
+             "Invalid Move!"
         if not isCopy:
             self.print_taquin()
 
@@ -114,7 +135,7 @@ class Player(object):
         return True
 
     def print_taquin( self ):
-        print "********************************************\n"
+        print "********************************************"
         s = [[str(e) for e in row] for row in self.Taquin]
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
@@ -135,7 +156,7 @@ class Player(object):
             best = queue.get()
             raw_input("Press Enter to continue...")
             self.move( best.movement , False )
-            print "El mejor movimiento es: %i %i " % ( best.i , best.j )
+            print "El mejor movimiento es hacia %i %i " % ( best.i , best.j )
         #obtener todos los posibles movimientos el movimiento actual
 
 
@@ -146,7 +167,7 @@ class Movement:
         self.Taquin = deepcopy( Taquin )
         self.correctly_placed = self.count_correctly_placed()
         self.exact_total_distance = self.count_exact_total_distance()
-        print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
+        #print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
         self.i = deepcopy( i )
         self.j = deepcopy( j )
         self.movement = deepcopy( movement )
