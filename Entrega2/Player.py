@@ -7,6 +7,7 @@ class Player(object):
     Taquin = [[]]
 
     def __init__( self , url="http://localhost:8080" , size = 2 , pid = 1 , name="DCD" , oid = 1):
+        print "entra const"
         self.url = url
         self.size = int( size )
         self.Taquin = \
@@ -22,8 +23,8 @@ class Player(object):
             for j in range( self.size ):
                 self.Taquin[ i ][ j ] = count
                 count = count + 1
+        #self.play() #quitar en produccion
         self.Taquin[ self.size - 1 ][ self.size - 1] = None
-        self.play() #quitar en produccion
         
 
 
@@ -32,12 +33,8 @@ class Player(object):
         for k in range( self.size + 5 ):
             move = self.random_move(  )
             moves.append( move )
-            self.move( move )
-            raw_input("Press Enter to continue...")
-        
+            self.move( move , False )   
         return moves
-            
-
             
     def get_valid_moves( self ):
         valid_moves = []
@@ -57,39 +54,48 @@ class Player(object):
         return moves[ random.randint( 0 , len( moves ) - 1 ) ]
 
     def play( self ):
+        raw_input("Press Enter to continue...")
         generateBoard( self.url , self.Taquin , self.size - 1 , self.size - 1 )
+        raw_input("Press Enter to continue...")
         create_player( self.url , self.pid , self.name )
-        challenge( self.url , self.Taquin , self.size , self.size , self.oid )
+        raw_input("Press Enter to continue...")
+        challenge( self.url , self.Taquin , self.size - 1 , self.size - 1 , self.oid )
 
     def swap( self , initial_i , initial_j , end_i , end_j ):
         copy = self.Taquin[ initial_i ][ initial_j ]
         self.Taquin[ initial_i ][ initial_j ] = self.Taquin[ end_i ][ end_j ]
         self.Taquin[ end_i ][ end_j ] = copy
 
-    def move( self , direction ):
+    def move( self , direction , isCopy ):
         if direction == 0:
-            print "        Movimiento derecha %i %i" % ( self.i , self.j )
-            move_right( self.url , self.pid )
+            
+            if not isCopy:
+                print "        Movimiento derecha %i %i" % ( self.i , self.j )
+                move_right( self.url , self.pid )
             self.swap( self.i , self.j , self.i , self.j + 1 )
             self.j = self.j + 1
         elif direction == 1:
-             print "        Movimiento izquierda %i %i" % ( self.i , self.j )
-             move_left( self.url , self.pid )
+             if not isCopy:
+                print "        Movimiento izquierda %i %i" % ( self.i , self.j )
+                move_left( self.url , self.pid )
              self.swap( self.i , self.j , self.i , self.j - 1 )
              self.j = self.j - 1
         elif direction == 2:
-            print "         Movimiento arriba %i %i" % ( self.i , self.j )
-            move_up( self.url , self.pid )
+            if not isCopy:
+                print "         Movimiento arriba %i %i" % ( self.i , self.j )
+                move_up( self.url , self.pid )
             self.swap( self.i , self.j , self.i - 1 , self.j )
             self.i = self.i - 1
         elif direction == 3:
-            print "         Movimiento abajo %i %i" % ( self.i , self.j )
-            move_down( self.url , self.pid )
+            if not isCopy:
+                print "         Movimiento abajo %i %i" % ( self.i , self.j )
+                move_down( self.url , self.pid )
             self.swap( self.i , self.j , self.i + 1 , self.j )
             self.i = self.i + 1
         else:
             print "Invalid Move!"
-        self.print_taquin()
+        if not isCopy:
+            self.print_taquin()
 
     def is_ordered( self ):
         array = []
@@ -116,19 +122,19 @@ class Player(object):
         print "********************************************\n"
 
     def simulate_player( self ): 
-        print "*************** Jugador ******************"
+        print "*************** Jugador *************************"
         while not self.is_ordered():
             queue = Q.PriorityQueue()
             moves = self.get_valid_moves()
             print "Hay %i movimientos" % ( len( moves ) )
             for movement in moves:
                 player_copy = deepcopy( self )
-                player_copy.move( movement )
+                player_copy.move( movement , True )
                 queue.put( Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement ) )
             best = queue.get()
-            self.move( best.movement )
-            print "El mejor movimiento es: %i %i " % ( best.i , best.j )
             raw_input("Press Enter to continue...")
+            self.move( best.movement , False )
+            print "El mejor movimiento es: %i %i " % ( best.i , best.j )
         #obtener todos los posibles movimientos el movimiento actual
 
 
@@ -140,9 +146,9 @@ class Movement:
         self.correctly_placed = self.count_correctly_placed()
         self.exact_total_distance = self.count_exact_total_distance()
         print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
-        self.i = i
-        self.j = j
-        self.movement = movement
+        self.i = deepcopy( i )
+        self.j = deepcopy( j )
+        self.movement = deepcopy( movement )
 
  
     def count_exact_total_distance( self ):
