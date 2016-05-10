@@ -1,0 +1,5 @@
+absolute_import
+urllib3
+VendorAlias
+sys
+chardet
