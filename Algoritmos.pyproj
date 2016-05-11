@@ -49,6 +49,8 @@
     <Compile Include="Taller3\square_cut.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Entrega2\arc.txt" />
+    <Content Include="Entrega2\conf.txt" />
     <Content Include="proyecto\Taquin\build\reports\tests\classes\co.edu.javeriana.galileo.ManagerApplicationTests.html" />
     <Content Include="proyecto\Taquin\build\reports\tests\css\base-style.css" />
     <Content Include="proyecto\Taquin\build\reports\tests\css\style.css" />

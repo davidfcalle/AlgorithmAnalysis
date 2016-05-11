@@ -15,17 +15,41 @@ class Player(object):
         self.pid = pid
         self.name = name
         self.oid = oid #id del oponente
+    """
+        constructor para jugar solo 
+    """
+    def __init__( self , url="http://localhost:8080" , size = 2 , pid = 1 , name="DCD" , oid = 1 , Taquin  = [[]] , i = 0 , j = 0):
+        self.url = url
+        self.size = int( size )
+        self.Taquin = \
+                  [ [ 0 for i in range( self.size ) ] \
+                    for j in range( self.size ) ]
+        self.pid = pid
+        self.name = name
+        self.oid = oid #id del oponente
+        self.Taquin = Taquin
+        self.i = i 
+        self.j = j
+        self.Taquin[ i ][ j ] = None
+
 
     def get_challenge( self ):
         challenge = get_board( self.url , self.pid )
+        self.size = len( challenge["currentState"] ) 
+        print "el tam del reto es de %i" % self.size
+        self.Taquin = \
+                  [ [ 0 for i in range( self.size ) ] \
+                    for j in range( self.size ) ]
         for i in range( len( challenge["currentState"] ) ):
              for j in range( len( challenge["currentState"] ) ):
                             try:
                                 self.Taquin[ i ][ j ] = int( challenge["currentState"][ i ][ j ] )
                             except:
+                                print "error al parsear %s" % challenge["currentState"][ i ][ j ]
                                 self.Taquin[ i ][ j ]  = None
         self.i = int( challenge["blank"]["row"] )
         self.j = int( challenge["blank"]["column"] )
+        self.Taquin[ self.i ][ self.j ] = None
         self.print_taquin()
 
     def compete( self ):
@@ -43,6 +67,9 @@ class Player(object):
         self.i = self.size - 1
         self.j = self.size - 1
 
+     
+    def add_challenge( self , Matrix , i , j  ):
+        challenge( self.url , Matrix , i , j , self.oid )
 
     def shuffle( self ):
         moves = []
@@ -77,7 +104,7 @@ class Player(object):
         challenge( self.url , self.Taquin , self.i , self.j , self.oid )
 
     def create_player( self ):
-        #generateBoard( self.url , self.Taquin , self.i , self.j )
+        generateBoard( self.url , self.Taquin , self.i , self.j )
         self.register( )
 
     def swap( self , initial_i , initial_j , end_i , end_j ):
@@ -154,9 +181,9 @@ class Player(object):
                 player_copy.move( movement , True )
                 queue.put( Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement ) )
             best = queue.get()
-            raw_input("Press Enter to continue...")
+            #raw_input("Press Enter to continue...")
             self.move( best.movement , False )
-            print "El mejor movimiento es hacia %i %i " % ( best.i , best.j )
+            #print "El mejor movimiento es hacia %i %i " % ( best.i , best.j )
         #obtener todos los posibles movimientos el movimiento actual
 
 
