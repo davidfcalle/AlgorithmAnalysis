@@ -1,6 +1,17 @@
+
 def calcular_mejor_opcion( M , p ):
     resultado = encontrar_mejor_opcion_matriz( M )
-    print resultado
+    ingredientes = []
+    if resultado["discordancia"] > p:
+        # no caben dos, podria ser cualquiera indivual solamente
+        return []
+    ingredientes.append( resultado["i"] )
+    ingredientes.append( resultado["j"] )
+    ingrendientes = obtener_siguiente_ingrediente( ingredientes , M , P )
+    return ingredientes
+
+def obtener_siguiente_ingrediente( ingredientes , M , p ):
+    # el valor agregando los ingredientes y retornar
 
 def encontrar_mejor_opcion_matriz( M ):
     i_seleccionado , j_seleccionado = -1 , 1
