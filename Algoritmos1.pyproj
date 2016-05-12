@@ -21,6 +21,9 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cocina\cocina.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Dinamica\01-Knapsack.py">
       <SubType>Code</SubType>
     </Compile>
@@ -54,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dinamica" />
+    <Folder Include="Cocina\" />
     <Folder Include="seguridad\" />
     <Folder Include="quiz3" />
     <Folder Include="taller1" />

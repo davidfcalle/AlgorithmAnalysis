@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3f3ef6d2-765c-4d5a-bd87-5fe65b4c78f7}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>Entrega2\main.py</StartupFile>
+    <StartupFile>TallerCocina\taller_cocina.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -47,6 +47,9 @@
     <Compile Include="taller2\timer.py" />
     <Compile Include="Taller3\cut_rod.py" />
     <Compile Include="Taller3\square_cut.py" />
+    <Compile Include="TallerCocina\taller_cocina.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entrega2\arc.txt" />
@@ -87,6 +90,7 @@
   <ItemGroup>
     <Folder Include="Dinamica" />
     <Folder Include="Entrega2\" />
+    <Folder Include="TallerCocina\" />
     <Folder Include="proyecto\" />
     <Folder Include="proyecto\Taquin\" />
     <Folder Include="proyecto\Taquin\build\" />
