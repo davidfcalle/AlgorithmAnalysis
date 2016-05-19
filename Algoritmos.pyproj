@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3f3ef6d2-765c-4d5a-bd87-5fe65b4c78f7}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>TallerCocina\taller_cocina.py</StartupFile>
+    <StartupFile>cortes\main.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -21,6 +21,12 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="cortes\Corte.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cortes\main.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Dinamica\bool_asociation.py" />
     <Compile Include="Dinamica\bool_asociation_memoized.py">
       <SubType>Code</SubType>
@@ -90,6 +96,7 @@
   <ItemGroup>
     <Folder Include="Dinamica" />
     <Folder Include="Entrega2\" />
+    <Folder Include="cortes\" />
     <Folder Include="TallerCocina\" />
     <Folder Include="proyecto\" />
     <Folder Include="proyecto\Taquin\" />
