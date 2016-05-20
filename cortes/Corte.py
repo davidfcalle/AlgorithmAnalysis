@@ -14,7 +14,6 @@ class Tela( object ):
         cola = Q.PriorityQueue()
         for corte in self.cortes:
             cola.put( corte )
-        # ya estuvo
         parada = False
         i = 1 # i representa el i actual
         j = 1 # j representa el j actual
@@ -22,38 +21,39 @@ class Tela( object ):
         renglon_nuevo = True
         inserciones = []
         while parada != True:
-            #print "entra"
             meto = False
             intentos = []
             iMax = self.alto - i + 1
             while meto != True:
-                #print "intento meter"
                 if cola.qsize() == 0:
                     break
-                #print "tam cola %i" %( cola.qsize() )
                 corte = cola.get( )
-                #print "queda i:%i iMax: %i y j:%i" % ( i , iMax , j ) 
-                #print "Para un corte %i %i" % ( corte.ancho , corte.alto )
-                #print "miro a ver si cabe en un espacio de %i * %i " % ( self.ancho - j + 1  , iMax - i + 1 )
                 if corte.cabe( self.ancho - j  + 1 , iMax - i + 1 ) == True:
-                    #print "meto"
                     iMax = corte.alto 
                     j = j + corte.ancho
                     inserciones.append( corte )
-                    #print([str(item) for item in inserciones])
-                    #print "queda i:%i iMax: %i y j:%i" % ( i , iMax , j )
-                    raw_input("")
                     renglon_nuevo = False
                     corte.cantidad = corte.cantidad - 1
                     if corte.cantidad > 0:
                         cola.put( corte )
                     meto = True
                 else:
-                    #print "no se puede meter"
-                    intentos.append( corte )
-                    if cola.empty( ):
+                    invertido = Corte( corte.alto , corte.ancho , corte.cantidad )
+                    if invertido.cabe( self.ancho - j  + 1 , iMax - i + 1 ) == True:
+                        iMax = invertido.alto 
+                        j = j + invertido.ancho
+                        inserciones.append( invertido )
+                        renglon_nuevo = False
+                        invertido.cantidad = corte.cantidad - 1
+                        if invertido.cantidad > 0:
+                            cola.put( invertido )
                         meto = True
-                        break
+                    else:
+                        #revisar si cabe al reves
+                        intentos.append( corte )
+                        if cola.empty( ):
+                            meto = True
+                            break
                 if meto is True:
                     for intento in intentos:
                         cola.put( intento )
@@ -83,9 +83,7 @@ class Corte(object):
 
     def cabe( self , ancho , alto ):
         if self.ancho <= ancho and self.alto <= alto :
-            print "BIIIEN"
             return True
-        print "PAILAAA"
         return False
 
     def __cmp__( self , other ):

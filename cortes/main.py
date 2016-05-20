@@ -9,7 +9,7 @@ if __name__ == "__main__":
     cortes.append( corte1 )
     cortes.append( corte2 )
     cortes.append( corte3 )
-    tela = Tela( 6 , 2 , cortes )
+    tela = Tela( 3 , 2 , cortes )
     res =  tela.cortar()
     print([str(item) for item in res])
     raw_input("Fin!")
