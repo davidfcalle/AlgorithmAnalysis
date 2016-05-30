@@ -2,6 +2,8 @@ from client import *
 from copy import copy, deepcopy
 import Queue as Q
 import random
+from math import *
+from sets import Set
 
 class Player(object):
     Taquin = [[]]
@@ -12,6 +14,7 @@ class Player(object):
         self.Taquin = \
                   [ [ 0 for i in range( self.size ) ] \
                     for j in range( self.size ) ]
+        print self.Taquin
         self.pid = pid
         self.name = name
         self.oid = oid #id del oponente
@@ -22,14 +25,15 @@ class Player(object):
         self.url = url
         self.size = int( size )
         self.Taquin = \
-                  [ [ 0 for i in range( self.size ) ] \
-                    for j in range( self.size ) ]
+                  [ [ 0 for w in range( self.size ) ] \
+                    for z in range( self.size ) ]
         self.pid = pid
         self.name = name
         self.oid = oid #id del oponente
         self.Taquin = Taquin
         self.i = i 
         self.j = j
+        print self.Taquin
         self.Taquin[ i ][ j ] = None
 
 
@@ -101,6 +105,7 @@ class Player(object):
 
     def challenge( self ):
         """ por ahora el challenge es retar con lo que tambien me pusieron """
+        print "Se va a hacer un chalenge de %i %i" % ( self.i , self.j )
         challenge( self.url , self.Taquin , self.i , self.j , self.oid )
 
     def create_player( self ):
@@ -172,19 +177,66 @@ class Player(object):
 
     def simulate_player( self ): 
         print "*************** Jugador *************************"
+        previous = None
+        best = None
+        movimientos = []
         while not self.is_ordered():
             queue = Q.PriorityQueue()
             moves = self.get_valid_moves()
-            print "Hay %i movimientos" % ( len( moves ) )
+            #print "Hay %i movimientos" % ( len( moves ) )
             for movement in moves:
                 player_copy = deepcopy( self )
                 player_copy.move( movement , True )
-                queue.put( Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement ) )
-            best = queue.get()
-            #raw_input("Press Enter to continue...")
+                move = Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement ) 
+                if previous == None or move.is_equal( previous ) == False:
+                    queue.put( move )
+                    
+            previous = deepcopy( best )
+            best = queue.get( )
+            print "     el mejor movimiento tiene %i %f " % ( best.correctly_placed , best.exact_total_distance)
+            #raw_input("...")
+            while best in movimientos:
+                best = queue.get()
             self.move( best.movement , False )
+            movimientos.append( best )
+            #raw_input("Press Enter to continue...")
+        #aca acaba de jugar
+        """
+        min_moves = []
+        posicion_movimientos = len( movimientos ) - 1
+        min_moves.append( movimientos[ posicion_movimientos ] )
+        #print "mejor movimiento"
+        #movimientos[ posicion_movimientos ].print_taquin()
+        cont_movimientos = 0
+        while posicion_movimientos > 0 :
+            cont_movimientos = cont_movimientos + 1
+            i = posicion_movimientos - 1
+            movimiento = movimientos[ posicion_movimientos ]
+            min_i = posicion_movimientos - 1
+            while i >= 0 :
+                movimiento_temp =  movimientos[ i ]
+                print i
+                if movimiento_temp.can_reach( movimiento ):
+                    print "movimientos %i"% cont_movimientos
+                    raw_input("ASDSA")
+                    min_i = i
+                i = i - 1
+            posicion_movimientos = min_i
+           #print "mejor movimiento"
+            #movimientos[ min_i ].print_taquin()
+            min_moves.insert( 0 , movimientos[ min_i ] )
+        
+        print "hace %i movimeintos" % len( min_moves )
+        raw_input("ACABO")
+        for r in min_moves:
+            print r.print_taquin()
+        """
+                #if puedo llegar desde movimeinto a movimiento temp
+
+                # verifico si puedo llegar al estado
+
+            
             #print "El mejor movimiento es hacia %i %i " % ( best.i , best.j )
-        #obtener todos los posibles movimientos el movimiento actual
 
 
 
@@ -194,23 +246,73 @@ class Movement:
         self.Taquin = deepcopy( Taquin )
         self.correctly_placed = self.count_correctly_placed()
         self.exact_total_distance = self.count_exact_total_distance()
-        #print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
+        print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
         self.i = deepcopy( i )
         self.j = deepcopy( j )
         self.movement = deepcopy( movement )
+        #print "Correctos %i - Distancia %f" % ( self.correctly_placed ,  self.exact_total_distance)
 
+
+    def print_taquin( self ):
+        print "********************************************"
+        s = [[str(e) for e in row] for row in self.Taquin]
+        lens = [max(map(len, col)) for col in zip(*s)]
+        fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+        table = [fmt.format(*row) for row in s]
+        print '\n'.join(table)
+        print "********************************************\n"
+
+    def can_reach( self , other ):
+        x_distance = abs(self.i - other.i)
+        y_distance = abs(self.j - other.j)
+        different = 0
+        for i in range( len( self.Taquin ) ):
+            for j in range( len( self.Taquin ) ):
+                if self.Taquin[ i ][ j ] != other.Taquin[ i ][ j ]:
+                    different = different + 1
+        
+        if different == 2 and x_distance + y_distance == 1:
+            #print "puede llegar desde"
+            #other.print_taquin()
+            #print "fin desde"
+            #self.print_taquin()
+            return True
+        return False
  
     def count_exact_total_distance( self ):
         count = 0
         array = []
-        total_distance = 0
+        total_distance = 0.0
+        last = ( len( self.Taquin ) * len( self.Taquin ) )
         for i in range( len( self.Taquin ) ):
             for j in range( len( self.Taquin ) ):
                 count = count + 1
                 value = self.Taquin[ i ][ j ]
                 if value is not None:
-                    total_distance = total_distance + abs( value - count )
+                    distance = self.get_position_distance( self.Taquin[ i ][ j ] , i , j  )
+                    total_distance = total_distance + distance
+                else:
+                    total_distance = total_distance + abs( last - count )
+
+        #raw_input("ASDSA")
         return total_distance
+
+    def get_position_distance( self , number , i , j ):
+        count = 0
+        i_r = 0
+        j_r = 0
+        for x in range( len( self.Taquin ) ):
+            for y in range( len( self.Taquin ) ):
+                count = count + 1
+                if count == number:
+                    #print "En %i %i va %i " %( x , y , number )
+                    i_r = x
+                    j_r = y
+        #distancia euclideana
+        # en i_r y j_r el lugar en donde deberia ir la ficha
+        return  abs( i - i_r ) + abs( j_r - j )
+
+
 
     def count_correctly_placed( self ):
         array = []
@@ -223,15 +325,48 @@ class Movement:
         array.append( None ) # pongo uno extra para empezar desde 1
         array.pop( 0 )
         for k in range( len( array ) ):
-            if array[ k ] != current[ k ]:
+            if array[ k ] == current[ k ]:
                 count = count + 1
         return count
 
+    def is_equal( self , other ):
+        if other == None:
+            #raw_input("Uno de ellos es None")
+            return False
+        """
+        print "Comparo"
+        print self.Taquin
+        print other.Taquin
+        print "fin comparacion"
+        """
+        for i in range( len( self.Taquin ) ):
+            for j in range( len( self.Taquin ) ):
+                if self.Taquin[ i ][ j ] != other.Taquin[ i ][ j ]:
+                    #raw_input("NO SON IGUALES")
+                    return False
+        #raw_input("SON IGUALES")
+        return True
+
+
+    def __eq__( self , other ):
+        if other == None:
+            #raw_input("Uno de ellos es None")
+            return False    
+        for i in range( len( self.Taquin ) ):
+            for j in range( len( self.Taquin ) ):
+                if self.Taquin[ i ][ j ] != other.Taquin[ i ][ j ]:
+                    #raw_input("NO SON IGUALES")
+                    return False
+        #raw_input("SON IGUALES")
+        return True
+
     def __cmp__( self , other ):
-        first = cmp( self.correctly_placed , other.correctly_placed )
+        if other == None:
+            return 1
+        first = -1 * cmp( self.correctly_placed , other.correctly_placed )
         if first != 0:
-            return first
-        return cmp( self.exact_total_distance , other.exact_total_distance )
+           return first
+        return  cmp( self.exact_total_distance , other.exact_total_distance )
 
 
 

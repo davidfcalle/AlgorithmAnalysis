@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3f3ef6d2-765c-4d5a-bd87-5fe65b4c78f7}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>cortes\main.py</StartupFile>
+    <StartupFile>TaquinPlayer\main.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -32,13 +32,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dinamica\max_cont_val.py" />
-    <Compile Include="Entrega2\client.py">
+    <Compile Include="TaquinPlayer\client.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entrega2\main.py">
+    <Compile Include="TaquinPlayer\main.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entrega2\Player.py">
+    <Compile Include="TaquinPlayer\Player.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="proyecto\Taquin\cliente\client.py" />
@@ -58,8 +58,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Entrega2\arc.txt" />
-    <Content Include="Entrega2\conf.txt" />
+    <Content Include="TaquinPlayer\4.txt" />
+    <Content Include="TaquinPlayer\arc.txt" />
+    <Content Include="TaquinPlayer\conf.txt" />
     <Content Include="proyecto\Taquin\build\reports\tests\classes\co.edu.javeriana.galileo.ManagerApplicationTests.html" />
     <Content Include="proyecto\Taquin\build\reports\tests\css\base-style.css" />
     <Content Include="proyecto\Taquin\build\reports\tests\css\style.css" />
@@ -95,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dinamica" />
-    <Folder Include="Entrega2\" />
+    <Folder Include="TaquinPlayer\" />
     <Folder Include="cortes\" />
     <Folder Include="TallerCocina\" />
     <Folder Include="proyecto\" />

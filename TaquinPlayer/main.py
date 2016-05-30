@@ -5,16 +5,16 @@ from Player import Player
 """
 def load_configuration( filename ):
     fp = open( filename )
-    url = fp.readline()
-    url = url.strip()
-    pid = int( fp.readline() )
-    oid = int( fp.readline() )
-    name = fp.readline()
-    challenge_size = int( fp.readline() )   
-    challenge_i_j = fp.readline()
-    arg_list = challenge_i_j.split()
-    i = arg_list[ 0 ]
-    j = arg_list[ 1 ]
+    url = fp.readline( )
+    url = url.strip( )
+    pid = int( fp.readline( ) )
+    oid = int( fp.readline( ) )
+    name = fp.readline( )
+    challenge_size = int( fp.readline( ) )   
+    challenge_i_j = fp.readline( )
+    arg_list = challenge_i_j.split( )
+    i =int( arg_list[ 0 ] )
+    j = int( arg_list[ 1 ] )
     matrix = []
     row = "whatever"
     while challenge_size > 0:
@@ -27,14 +27,15 @@ def load_configuration( filename ):
         if len( row ) == 0:
             break
         matrix.append( row )
-    player = Player( url=url , size = challenge_size , pid = pid , oid = oid, i = i , j = j , Taquin = matrix)
+    print "se va a crear un jugador con blanco en %i %i " %( i , j )
+    player = Player( url=url , size = challenge_size , pid = pid , oid = oid, i = i , j = j , Taquin = matrix )
     return player
         
    
 def main():
     raw_input( "  ¿Listo? " )
-    """
-    player = load_configuration( "C:\Users\david\Documents\Javeriana\Algoritmos\Entrega2\conf.txt" )
+    
+    player = load_configuration( "C:\Users\david\Documents\Javeriana\Algoritmos\TaquinPlayer\conf.txt" )
     player.create_player( )
     player.challenge( )
     raw_input( "  Listo para jugar  " )
@@ -60,7 +61,7 @@ def main():
     
     player2.compete( )
     player.compete( )
-
+    """
         
 if __name__ == '__main__':
     main()
