@@ -4,6 +4,10 @@ import Queue as Q
 import random
 from math import *
 from sets import Set
+import time
+
+
+MANHATAN_CACHE = [[[None for k in xrange(100)] for j in xrange(10)] for i in xrange(10)]
 
 class Player(object):
     Taquin = [[]]
@@ -35,6 +39,7 @@ class Player(object):
         self.j = j
         print self.Taquin
         self.Taquin[ i ][ j ] = None
+        self.TaquinCopy = deepcopy( Taquin )
 
 
     def get_challenge( self ):
@@ -94,6 +99,7 @@ class Player(object):
             valid_moves.append( 1 )
         if self.j < self.size - 1:
             valid_moves.append( 0 )
+        random.shuffle( valid_moves )
         return valid_moves
 
     def random_move( self ):
@@ -175,62 +181,71 @@ class Player(object):
         print '\n'.join(table)
         print "********************************************\n"
 
+    def imprimir_movimiento( self,  movimiento ):
+        """ derecha izq arr abajo"""
+        if movimiento == 0:
+            return "derecha"
+        if movimiento == 1:
+            return "izquierda"
+        if movimiento == 2:
+            return "Arriba"
+        if movimiento == 3:
+            return "Abajo"
+
     def simulate_player( self ): 
         print "*************** Jugador *************************"
         previous = None
         best = None
         movimientos = []
-        while not self.is_ordered():
-            queue = Q.PriorityQueue()
+        estados = []
+        total_movimientos = 0
+        camino = ""
+        start = time.time()
+        queue = Q.PriorityQueue()
+        best = None
+        while best is None or best.exact_total_distance > 0 :
             moves = self.get_valid_moves()
-            #print "Hay %i movimientos" % ( len( moves ) )
+            total_movimientos = total_movimientos + 1
+
             for movement in moves:
                 player_copy = deepcopy( self )
                 player_copy.move( movement , True )
-                move = Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement ) 
-                if previous == None or move.is_equal( previous ) == False:
+                if best != None:
+                    camino = best.path + str( movement )
+                    total_movimientos = best.move_count + 1
+                else:
+                    camino = str( movement )
+                    total_movimientos = 1
+                move = Movement( player_copy.Taquin , player_copy.i , player_copy.j , movement , total_movimientos , camino , best )
+                #aca falta es no crear siempre los movimietos completos si no solo llamar a las funciones de calculo si no lo he hecho antes
+                if move not in estados:
                     queue.put( move )
-                    
+                    estados.append( move )
+                else:
+                    for estado in estados:
+                        if estado.is_equal( move ):
+                            move.path = estado.path
+            
             previous = deepcopy( best )
             best = queue.get( )
-            print "     el mejor movimiento tiene %i %f " % ( best.correctly_placed , best.exact_total_distance)
-            #raw_input("...")
-            while best in movimientos:
-                best = queue.get()
-            self.move( best.movement , False )
+            print "     el mejor movimiento con distancia %f y direccion %s" % ( best.exact_total_distance , self.imprimir_movimiento( best.movement ) )
+            self.Taquin = best.Taquin
+            self.i = best.i 
+            self.j = best.j
             movimientos.append( best )
-            #raw_input("Press Enter to continue...")
-        #aca acaba de jugar
-        """
-        min_moves = []
-        posicion_movimientos = len( movimientos ) - 1
-        min_moves.append( movimientos[ posicion_movimientos ] )
-        #print "mejor movimiento"
-        #movimientos[ posicion_movimientos ].print_taquin()
-        cont_movimientos = 0
-        while posicion_movimientos > 0 :
-            cont_movimientos = cont_movimientos + 1
-            i = posicion_movimientos - 1
-            movimiento = movimientos[ posicion_movimientos ]
-            min_i = posicion_movimientos - 1
-            while i >= 0 :
-                movimiento_temp =  movimientos[ i ]
-                print i
-                if movimiento_temp.can_reach( movimiento ):
-                    print "movimientos %i"% cont_movimientos
-                    raw_input("ASDSA")
-                    min_i = i
-                i = i - 1
-            posicion_movimientos = min_i
-           #print "mejor movimiento"
-            #movimientos[ min_i ].print_taquin()
-            min_moves.insert( 0 , movimientos[ min_i ] )
-        
-        print "hace %i movimeintos" % len( min_moves )
-        raw_input("ACABO")
-        for r in min_moves:
-            print r.print_taquin()
-        """
+            #raw_input("...")
+            
+        print "FIN! total movimientos=%i" % total_movimientos
+        print "camino %s %i" % ( movimientos[ len( movimientos ) - 1 ].path, len( movimientos[ len( movimientos ) - 1 ].path ) )
+        end = time.time()
+        print "Se demoro %f" %(end - start)
+        raw_input( "Termina")
+        self.Taquin = self.TaquinCopy
+        for move in  movimientos[ len( movimientos ) - 1 ].path :
+            self.print_taquin()
+            print "Se mueve %s i:%i j:%i" % ( move , self.i , self.j )
+            self.move( int(move) , False )
+
                 #if puedo llegar desde movimeinto a movimiento temp
 
                 # verifico si puedo llegar al estado
@@ -242,14 +257,19 @@ class Player(object):
 
 class Movement:
 
-    def __init__( self, Taquin , i , j , movement ):
+    def __init__( self, Taquin , i , j , movement , move_count , path , previous ):
         self.Taquin = deepcopy( Taquin )
-        self.correctly_placed = self.count_correctly_placed()
-        self.exact_total_distance = self.count_exact_total_distance()
-        print " Se crea un movimiento con puestos %i y distancia %i " % ( self.correctly_placed , self.exact_total_distance )
+        self.path = path
+        self.previous = previous
         self.i = deepcopy( i )
         self.j = deepcopy( j )
         self.movement = deepcopy( movement )
+        self.move_count = move_count
+        self.correctly_placed = 0#self.count_correctly_placed()
+        self.exact_total_distance = self.count_exact_total_distance()
+        #print " Se crea un movimiento con puestos %i y distancia %i , movmiento %i y camino %s " % ( self.correctly_placed , self.exact_total_distance , movement, path)
+        
+        
         #print "Correctos %i - Distancia %f" % ( self.correctly_placed ,  self.exact_total_distance)
 
 
@@ -272,32 +292,55 @@ class Movement:
                     different = different + 1
         
         if different == 2 and x_distance + y_distance == 1:
-            #print "puede llegar desde"
-            #other.print_taquin()
-            #print "fin desde"
-            #self.print_taquin()
             return True
         return False
  
     def count_exact_total_distance( self ):
-        count = 0
-        array = []
-        total_distance = 0.0
-        last = ( len( self.Taquin ) * len( self.Taquin ) )
-        for i in range( len( self.Taquin ) ):
-            for j in range( len( self.Taquin ) ):
-                count = count + 1
-                value = self.Taquin[ i ][ j ]
-                if value is not None:
-                    distance = self.get_position_distance( self.Taquin[ i ][ j ] , i , j  )
-                    total_distance = total_distance + distance
-                else:
-                    total_distance = total_distance + abs( last - count )
+        if self.previous is None:
+            count = 0
+            array = []
+            total_distance = 0.0
+            last = ( len( self.Taquin ) * len( self.Taquin ) )
+            for i in range( len( self.Taquin ) ):
+                for j in range( len( self.Taquin ) ):
+                    count = count + 1
+                    value = self.Taquin[ i ][ j ]
+                    if value is not None:
+                        distance = self.get_position_distance( self.Taquin[ i ][ j ] , i , j  )
+                        total_distance = total_distance + distance
+        else:
+            # tengo que determinar cual ficha es necesario recalcular
+            previous_i = self.previous.i
+            previous_j = self.previous.j
+            distance = self.previous.exact_total_distance - self.get_position_distance( self.Taquin[ previous_i ][ previous_j ] , self.i , self.j )
+            distance += self.get_position_distance( self.Taquin[ previous_i ][ previous_j ] , previous_i , previous_j )
+            current_row = 0
 
-        #raw_input("ASDSA")
+            for i in range( len( self.Taquin ) ):
+                error = 0
+                for j in range( len( self.Taquin ) ):
+                    value = self.Taquin[ i ][ j ]
+                    if value is not None:
+                        mi_row = value / len( self.Taquin )
+                        if mi_row == current_row and self.get_position_distance( value , i , j ) != 0:
+                            error += 1
+                if error > 1:
+                    distance += error - 1
+                current_row += 1
+
+
+
+                current_row += 1
+            #self.print_taquin()
+            #raw_input("Distancia con cache %i " % distance )
+            # ahora hace falta el conflicto lineal
+
+            return distance
         return total_distance
 
     def get_position_distance( self , number , i , j ):
+        if MANHATAN_CACHE[ i ][ j ][ number ] != None:
+            return MANHATAN_CACHE[ i ][ j ][ number ]
         count = 0
         i_r = 0
         j_r = 0
@@ -308,8 +351,10 @@ class Movement:
                     #print "En %i %i va %i " %( x , y , number )
                     i_r = x
                     j_r = y
+
         #distancia euclideana
         # en i_r y j_r el lugar en donde deberia ir la ficha
+        MANHATAN_CACHE[ i ][ j ][ number ] = abs( i - i_r ) + abs( j_r - j )
         return  abs( i - i_r ) + abs( j_r - j )
 
 
@@ -333,12 +378,9 @@ class Movement:
         if other == None:
             #raw_input("Uno de ellos es None")
             return False
-        """
-        print "Comparo"
-        print self.Taquin
-        print other.Taquin
-        print "fin comparacion"
-        """
+        if self.i != other.i or self.j != other.j:
+            return False
+
         for i in range( len( self.Taquin ) ):
             for j in range( len( self.Taquin ) ):
                 if self.Taquin[ i ][ j ] != other.Taquin[ i ][ j ]:
@@ -350,7 +392,6 @@ class Movement:
 
     def __eq__( self , other ):
         if other == None:
-            #raw_input("Uno de ellos es None")
             return False    
         for i in range( len( self.Taquin ) ):
             for j in range( len( self.Taquin ) ):
@@ -363,10 +404,11 @@ class Movement:
     def __cmp__( self , other ):
         if other == None:
             return 1
-        first = -1 * cmp( self.correctly_placed , other.correctly_placed )
+        first =  cmp( self.exact_total_distance**2 + self.move_count , other.exact_total_distance**2 + other.move_count ) 
+
         if first != 0:
            return first
-        return  cmp( self.exact_total_distance , other.exact_total_distance )
+        return -1 * cmp( self.correctly_placed  , other.correctly_placed ) 
 
 
 
