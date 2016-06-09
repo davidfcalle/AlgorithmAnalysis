@@ -1,7 +1,0 @@
-TestDistInfo
-pkg_resources
-DALS
-shutil
-os
-pytest
-tempfile
